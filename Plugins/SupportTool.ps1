@@ -45,7 +45,8 @@ $btnRun.Add_Click({
     $SupportPerson = $env:USERNAME
     $vComments     = $txtComments.Text.Trim()
     $vTicketNo     = $txtTicket.Text.Trim()
-    $emailper      = $cmbRecipient.SelectedItem.Content
+    $selectedRecipient = if ($cmbRecipient.SelectedItem) { $cmbRecipient.SelectedItem } else { $cmbRecipient.Items[0] }
+    $emailper      = $selectedRecipient.Content
 
     $vUserName     = $env:USERNAME
     $vHostName     = $env:COMPUTERNAME
@@ -59,7 +60,8 @@ $btnRun.Add_Click({
     $txtLog.AppendText("Folders created.`n")
 
     # Uptime
-    $uptime = "{0} Days, {1} Hours, {2} Minutes" -f ((Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime).Days, $_.Hours, $_.Minutes
+    $uptimeSpan = (Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+    $uptime = "{0} Days, {1} Hours, {2} Minutes" -f $uptimeSpan.Days, $uptimeSpan.Hours, $uptimeSpan.Minutes
     $txtLog.AppendText("Uptime: $uptime`n")
 
     # Gather reports (non-interactive)
