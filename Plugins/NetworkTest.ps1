@@ -66,13 +66,26 @@ $btnSpeed.Add_Click({
     if ($txtOutput) { $txtOutput.Text = "Running speed test... (may take 20-60s)`n`n" }
 
     try {
-        $speedtest = irm "https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py" -UseBasicParsing
-        $result = python - -q --simple 2>&1 | Out-String
-        if ($LASTEXITCODE -ne 0) { throw "Python failed" }
-        if ($txtResult) { $txtResult.Text = $result -replace "`r","" }
+        if (Get-Command speedtest -ErrorAction SilentlyContinue) {
+            $result = & speedtest --accept-license --accept-gdpr --format=human-readable 2>&1 | Out-String
+            if ($LASTEXITCODE -ne 0) { throw "Ookla Speedtest CLI failed" }
+            if ($txtResult) { $txtResult.Text = $result -replace "`r", "" }
+            return
+        }
+
+        if (-not (Get-Command python -ErrorAction SilentlyContinue)) {
+            throw "Python is not installed. Install Python 3 or Ookla Speedtest CLI."
+        }
+
+        $speedtestScript = irm "https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py" -UseBasicParsing
+        $result = $speedtestScript | python - -q --simple 2>&1 | Out-String
+        if ($LASTEXITCODE -ne 0) { throw "Python speedtest-cli failed" }
+        if ($txtResult) { $txtResult.Text = $result -replace "`r", "" }
     }
     catch {
-        if ($txtResult) { $txtResult.Text = "Speedtest failed.`nTry: irm https://install.speedtest.net/app/cli/Install.ps1 | iex`n`nError: $($_.Exception.Message)" }
+        if ($txtResult) {
+            $txtResult.Text = "Speedtest failed.`nInstall Ookla CLI: winget install Ookla.Speedtest.CLI`nOr install Python 3 and retry.`n`nError: $($_.Exception.Message)"
+        }
     }
     finally { if ($prog) { $prog.Visibility = "Hidden" } }
 })
