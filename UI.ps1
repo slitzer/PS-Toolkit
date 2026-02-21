@@ -12,10 +12,10 @@ $xaml=@"
 </Window>
 "@
 $window=[Windows.Markup.XamlReader]::Parse($xaml);$tabControl=$window.FindName("MainTabs")
-foreach($tab in $tabItems){if ($tab -and $tab -is [System.Windows.Controls.TabItem]) {$tabControl.Items.Add($tab)}}
+foreach($tab in $tabItems){if ($tab -and $tab -is [System.Windows.Controls.TabItem]) {($tabControl.Items.Add($tab) | Out-Null)}}
 if($tabControl.Items.Count -eq 0){
   $ph=New-Object System.Windows.Controls.TabItem;$ph.Header="Setup"
   $ph.Content=[Windows.Markup.XamlReader]::Parse('<TextBlock xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Text="No plugins found!&#10;Place *.ps1 files in Plugins folder&#10;Each must return $tab" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#ff4444" TextAlignment="Center"/>')
-  $tabControl.Items.Add($ph)
+  ($tabControl.Items.Add($ph) | Out-Null)
 }
 $window.ShowDialog()|Out-Null
