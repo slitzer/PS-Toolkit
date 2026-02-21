@@ -17,9 +17,13 @@ Run various audio, video, network, and system tasks via tabbed plugins.
 
 ## Installation
 ```powershell
-# One-liner (replace YOURUSER with your GitHub username)
-irm https://raw.githubusercontent.com/YOURUSER/PS-Toolkit/main/Install.ps1 | iex
+# One-liner
+irm https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Install.ps1 | iex
 ```
+
+> [!IMPORTANT]
+> Use the `raw.githubusercontent.com` URL (or add `?raw=1`) when piping into `iex`.
+> GitHub `.../blob/...` pages return HTML, which causes PowerShell parser errors.
 
 Or clone manually:
 
