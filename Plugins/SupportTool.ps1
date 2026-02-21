@@ -20,7 +20,7 @@ $gridXaml = @"
         </ComboBox>
     </StackPanel>
 
-    <Button x:Name="btnRun" Grid.Row="1" Content="GENERATE & ZIP SUPPORT FILES" Width="350" Height="45" Margin="5" Background="#d35400" FontWeight="Bold" />
+    <Button x:Name="btnRun" Grid.Row="1" Content="GENERATE &amp; ZIP SUPPORT FILES" Width="350" Height="45" Margin="5" Background="#d35400" FontWeight="Bold" />
 
     <TextBox x:Name="txtLog" Grid.Row="2" Margin="5" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Background="#1e1e1e" Foreground="#e0e0e0" FontFamily="Consolas" />
 
