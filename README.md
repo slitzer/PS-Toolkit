@@ -41,7 +41,8 @@ PS-Toolkit/
 ├── UI.ps1               # Main WPF loader
 ├── Plugins/
 │   ├── AudioToMP3.ps1
-│   └── NetworkTest.ps1
+│   ├── NetworkTest.ps1
+│   └── SupportTool.ps1
 └── Tools/               # Downloaded binaries (ffmpeg, etc.)
 ```
 
