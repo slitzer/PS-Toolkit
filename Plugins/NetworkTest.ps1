@@ -39,25 +39,41 @@ $prog      = $grid.FindName("prog")
 $btnPing.Add_Click({
     if ($prog) { $prog.Visibility = "Visible" }
     if ($txtResult) { $txtResult.Text = "" }
-    $host = if ($txtHost) { $txtHost.Text.Trim() } else { "" }
-    if (-not $host) { if ($txtResult) { $txtResult.Text = "Enter host" }; if ($prog) { $prog.Visibility = "Hidden" }; return }
 
-    if ($txtOutput) { $txtOutput.Text = "Pinging $host ...`n`n" }
-    $result = & ping -n 10 $host | Out-String
-    if ($txtResult) { $txtResult.Text = $result }
-    if ($prog) { $prog.Visibility = "Hidden" }
+    try {
+        $targetHost = if ($txtHost) { $txtHost.Text.Trim() } else { "" }
+        if (-not $targetHost) { if ($txtResult) { $txtResult.Text = "Enter host" }; return }
+
+        if ($txtOutput) { $txtOutput.Text = "Pinging $targetHost ...`n`n" }
+        $result = & ping.exe -n 10 $targetHost 2>&1 | Out-String
+        if ($txtResult) { $txtResult.Text = $result }
+    }
+    catch {
+        if ($txtResult) { $txtResult.Text = "Ping failed: $($_.Exception.Message)" }
+    }
+    finally {
+        if ($prog) { $prog.Visibility = "Hidden" }
+    }
 })
 
 $btnTrace.Add_Click({
     if ($prog) { $prog.Visibility = "Visible" }
     if ($txtResult) { $txtResult.Text = "" }
-    $host = if ($txtHost) { $txtHost.Text.Trim() } else { "" }
-    if (-not $host) { if ($txtResult) { $txtResult.Text = "Enter host" }; if ($prog) { $prog.Visibility = "Hidden" }; return }
 
-    if ($txtOutput) { $txtOutput.Text = "Tracing route to $host ...`n`n" }
-    $result = & tracert -d -h 30 $host | Out-String
-    if ($txtResult) { $txtResult.Text = $result }
-    if ($prog) { $prog.Visibility = "Hidden" }
+    try {
+        $targetHost = if ($txtHost) { $txtHost.Text.Trim() } else { "" }
+        if (-not $targetHost) { if ($txtResult) { $txtResult.Text = "Enter host" }; return }
+
+        if ($txtOutput) { $txtOutput.Text = "Tracing route to $targetHost ...`n`n" }
+        $result = & tracert.exe -d -h 30 $targetHost 2>&1 | Out-String
+        if ($txtResult) { $txtResult.Text = $result }
+    }
+    catch {
+        if ($txtResult) { $txtResult.Text = "Traceroute failed: $($_.Exception.Message)" }
+    }
+    finally {
+        if ($prog) { $prog.Visibility = "Hidden" }
+    }
 })
 
 $btnSpeed.Add_Click({
