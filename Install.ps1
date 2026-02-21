@@ -4,11 +4,16 @@ $AppName = "PSToolkit"
 $AppPath = "C:\$AppName"
 New-Item "$AppPath\Plugins" -ItemType Directory -Force | Out-Null
 
-# Cache-bust raw GitHub fetches to avoid stale script content
-$cacheBust = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
+irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/UI.ps1" -OutFile "$AppPath\UI.ps1"
+irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Plugins/AudioToMP3.ps1" -OutFile "$AppPath\Plugins/AudioToMP3.ps1"
+$networkPluginPath = "$AppPath\Plugins/NetworkTest.ps1"
+irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Plugins/NetworkTest.ps1" -OutFile $networkPluginPath
 
-irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/UI.ps1?ts=$cacheBust" -OutFile "$AppPath\UI.ps1"
-irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Plugins/AudioToMP3.ps1?ts=$cacheBust" -OutFile "$AppPath\Plugins/AudioToMP3.ps1"
-irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Plugins/NetworkTest.ps1?ts=$cacheBust" -OutFile "$AppPath\Plugins/NetworkTest.ps1"
+# Safety migration for older NetworkTest content that used $host (read-only automatic variable collision)
+$networkPluginContent = Get-Content -Path $networkPluginPath -Raw
+if ($networkPluginContent -match '(?i)\$host\s*=') {
+    $networkPluginContent = [regex]::Replace($networkPluginContent, '\$(?i:host)\b', '$targetHost')
+    Set-Content -Path $networkPluginPath -Value $networkPluginContent -NoNewline
+}
 
 & "$AppPath\UI.ps1"

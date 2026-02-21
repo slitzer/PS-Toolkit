@@ -54,6 +54,13 @@ $btnPing.Add_Click({
     finally {
         if ($prog) { $prog.Visibility = "Hidden" }
     }
+    $targetHost = if ($txtHost) { $txtHost.Text.Trim() } else { "" }
+    if (-not $targetHost) { if ($txtResult) { $txtResult.Text = "Enter host" }; if ($prog) { $prog.Visibility = "Hidden" }; return }
+
+    if ($txtOutput) { $txtOutput.Text = "Pinging $targetHost ...`n`n" }
+    $result = & ping -n 10 $targetHost | Out-String
+    if ($txtResult) { $txtResult.Text = $result }
+    if ($prog) { $prog.Visibility = "Hidden" }
 })
 
 $btnTrace.Add_Click({
@@ -74,6 +81,13 @@ $btnTrace.Add_Click({
     finally {
         if ($prog) { $prog.Visibility = "Hidden" }
     }
+    $targetHost = if ($txtHost) { $txtHost.Text.Trim() } else { "" }
+    if (-not $targetHost) { if ($txtResult) { $txtResult.Text = "Enter host" }; if ($prog) { $prog.Visibility = "Hidden" }; return }
+
+    if ($txtOutput) { $txtOutput.Text = "Tracing route to $targetHost ...`n`n" }
+    $result = & tracert -d -h 30 $targetHost | Out-String
+    if ($txtResult) { $txtResult.Text = $result }
+    if ($prog) { $prog.Visibility = "Hidden" }
 })
 
 $btnSpeed.Add_Click({
