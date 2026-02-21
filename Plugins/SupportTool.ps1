@@ -20,7 +20,7 @@ $gridXaml = @"
         </ComboBox>
     </StackPanel>
 
-    <Button x:Name="btnRun" Grid.Row="1" Content="GENERATE & ZIP SUPPORT FILES" Width="350" Height="45" Margin="5" Background="#d35400" FontWeight="Bold" />
+    <Button x:Name="btnRun" Grid.Row="1" Content="GENERATE &amp; ZIP SUPPORT FILES" Width="350" Height="45" Margin="5" Background="#d35400" FontWeight="Bold" />
 
     <TextBox x:Name="txtLog" Grid.Row="2" Margin="5" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Background="#1e1e1e" Foreground="#e0e0e0" FontFamily="Consolas" />
 
@@ -45,7 +45,8 @@ $btnRun.Add_Click({
     $SupportPerson = $env:USERNAME
     $vComments     = $txtComments.Text.Trim()
     $vTicketNo     = $txtTicket.Text.Trim()
-    $emailper      = $cmbRecipient.SelectedItem.Content
+    $selectedRecipient = if ($cmbRecipient.SelectedItem) { $cmbRecipient.SelectedItem } else { $cmbRecipient.Items[0] }
+    $emailper      = $selectedRecipient.Content
 
     $vUserName     = $env:USERNAME
     $vHostName     = $env:COMPUTERNAME
@@ -59,7 +60,8 @@ $btnRun.Add_Click({
     $txtLog.AppendText("Folders created.`n")
 
     # Uptime
-    $uptime = "{0} Days, {1} Hours, {2} Minutes" -f ((Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime).Days, $_.Hours, $_.Minutes
+    $uptimeSpan = (Get-Date) - (Get-CimInstance Win32_OperatingSystem).LastBootUpTime
+    $uptime = "{0} Days, {1} Hours, {2} Minutes" -f $uptimeSpan.Days, $uptimeSpan.Hours, $uptimeSpan.Minutes
     $txtLog.AppendText("Uptime: $uptime`n")
 
     # Gather reports (non-interactive)

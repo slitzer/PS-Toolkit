@@ -8,6 +8,7 @@ irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/UI.ps1" -OutFile 
 irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Plugins/AudioToMP3.ps1" -OutFile "$AppPath\Plugins/AudioToMP3.ps1"
 $networkPluginPath = "$AppPath\Plugins/NetworkTest.ps1"
 irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Plugins/NetworkTest.ps1" -OutFile $networkPluginPath
+irm "https://raw.githubusercontent.com/slitzer/PS-Toolkit/main/Plugins/SupportTool.ps1" -OutFile "$AppPath\Plugins/SupportTool.ps1"
 
 # Safety migration for older NetworkTest content that used $host (read-only automatic variable collision)
 $networkPluginContent = Get-Content -Path $networkPluginPath -Raw
